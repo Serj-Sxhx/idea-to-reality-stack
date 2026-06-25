@@ -213,13 +213,14 @@
         <li><strong>How is each output made?</strong> A <em>production graph</em>: ordered steps across Generate &rarr; Validate &rarr; Execute, where every step cites the tools it needs and a fulfillment % for how much AI can do unaided.</li>
       </ul>
 
-      <!-- Live counts come straight from the ontology (see ontology/validate.ts
-           output); update them whenever the dataset grows. -->
+      <!-- Live counts are written straight from the ontology by
+           ontology/generate.ts (npm run build:data); the data-stat attributes
+           are the targets it rewrites, so these never go stale. -->
       <div class="onto-stats" aria-label="Ontology at a glance">
-        <div class="onto-stat"><span class="onto-num">37</span><span class="onto-label">artifacts</span></div>
-        <div class="onto-stat"><span class="onto-num">56</span><span class="onto-label">tools / agents</span></div>
-        <div class="onto-stat"><span class="onto-num">136</span><span class="onto-label">production steps</span></div>
-        <div class="onto-stat"><span class="onto-num">5</span><span class="onto-label">domains</span></div>
+        <div class="onto-stat"><span class="onto-num" data-stat="artifacts">37</span><span class="onto-label">artifacts</span></div>
+        <div class="onto-stat"><span class="onto-num" data-stat="tools">56</span><span class="onto-label">tools / agents</span></div>
+        <div class="onto-stat"><span class="onto-num" data-stat="steps">136</span><span class="onto-label">production steps</span></div>
+        <div class="onto-stat"><span class="onto-num" data-stat="domains">5</span><span class="onto-label">domains</span></div>
       </div>
 
       <p>

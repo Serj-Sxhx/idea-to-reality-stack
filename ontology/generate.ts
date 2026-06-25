@@ -9,7 +9,7 @@
 // by " + "), keeping app.js unchanged while the source of truth stays typed.
 // ---------------------------------------------------------------------------
 
-import { writeFileSync } from "node:fs";
+import { writeFileSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { validateOntology, ARTIFACTS, TOOLS } from "./index.js";
@@ -22,6 +22,9 @@ if (!result.ok) {
   for (const e of result.errors) console.error("  - " + e);
   process.exit(1);
 }
+
+// Repo root is one level up from this ontology/ folder.
+const repoRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
 
 // id -> display name, used to turn toolIds into the legacy `tool` string.
 const toolName = new Map(TOOLS.map((t) => [t.id, t.name]));
@@ -56,9 +59,39 @@ const body =
   `const ARTIFACTS = ${JSON.stringify(renderedArtifacts, null, 2)};\n\n` +
   `window.IRS_DATA = { DOMAINS, STAGES, ARTIFACTS };\n`;
 
-// Write data.js to the repo root (one level up from ontology/).
-const outPath = join(dirname(fileURLToPath(import.meta.url)), "..", "data.js");
+// Write data.js to the repo root.
+const outPath = join(repoRoot, "data.js");
 writeFileSync(outPath, banner + "\n" + body, "utf8");
 
 console.log(`Wrote ${outPath}`);
 console.log(`  ${renderedArtifacts.length} artifacts, ${TOOLS.length} tools.`);
+
+// --- Keep the website's Ontology stats row in sync -------------------------
+// The numbers in index.html's <span class="onto-num" data-stat="..."> markers
+// are rewritten here from the live ontology, so a background agent editing the
+// dataset never leaves stale figures on the page. Each entry maps a data-stat
+// key to its current value.
+const websiteStats: Record<string, number> = {
+  artifacts: result.stats.artifacts,
+  tools: result.stats.tools,
+  steps: result.stats.steps,
+  domains: Object.keys(DOMAIN_LABELS).length,
+};
+
+const htmlPath = join(repoRoot, "index.html");
+let html = readFileSync(htmlPath, "utf8");
+let updated = 0;
+for (const [key, value] of Object.entries(websiteStats)) {
+  // Match the specific marker span for this stat and swap only its number.
+  const re = new RegExp(
+    `(<span class="onto-num" data-stat="${key}">)\\d+(</span>)`,
+  );
+  if (!re.test(html)) {
+    console.warn(`  ! No marker found for data-stat="${key}" in index.html`);
+    continue;
+  }
+  html = html.replace(re, `$1${value}$2`);
+  updated++;
+}
+writeFileSync(htmlPath, html, "utf8");
+console.log(`Synced ${updated} stat(s) into ${htmlPath}`);
