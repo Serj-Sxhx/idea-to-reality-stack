@@ -1244,4 +1244,802 @@ const ARTIFACTS = [
   }
 ];
 
-window.IRS_DATA = { DOMAINS, STAGES, ARTIFACTS };
+const ESTIMATES = {
+  "blog-post": {
+    "meanFulfillment": 93,
+    "weakestLink": {
+      "stage": "validate",
+      "name": "Fact-check + edit",
+      "fulfillment": 85
+    },
+    "byStage": {
+      "generate": 95,
+      "validate": 85,
+      "execute": 98
+    },
+    "toolFrontierYear": 2022,
+    "stackSize": 3,
+    "gaps": []
+  },
+  "ebook": {
+    "meanFulfillment": 87,
+    "weakestLink": {
+      "stage": "validate",
+      "name": "Developmental edit",
+      "fulfillment": 70
+    },
+    "byStage": {
+      "generate": 91,
+      "validate": 70,
+      "execute": 95
+    },
+    "toolFrontierYear": 2024,
+    "stackSize": 6,
+    "gaps": []
+  },
+  "newsletter": {
+    "meanFulfillment": 90,
+    "weakestLink": {
+      "stage": "validate",
+      "name": "Tone + link check",
+      "fulfillment": 80
+    },
+    "byStage": {
+      "generate": 92,
+      "validate": 80,
+      "execute": 97
+    },
+    "toolFrontierYear": 2022,
+    "stackSize": 4,
+    "gaps": []
+  },
+  "research-report": {
+    "meanFulfillment": 79,
+    "weakestLink": {
+      "stage": "validate",
+      "name": "Fact + citation audit",
+      "fulfillment": 60
+    },
+    "byStage": {
+      "generate": 81,
+      "validate": 60,
+      "execute": 95
+    },
+    "toolFrontierYear": 2025,
+    "stackSize": 5,
+    "gaps": []
+  },
+  "novel": {
+    "meanFulfillment": 74,
+    "weakestLink": {
+      "stage": "validate",
+      "name": "Coherence + voice edit",
+      "fulfillment": 45
+    },
+    "byStage": {
+      "generate": 79,
+      "validate": 45,
+      "execute": 95
+    },
+    "toolFrontierYear": 2024,
+    "stackSize": 5,
+    "gaps": [
+      {
+        "stage": "validate",
+        "name": "Coherence + voice edit",
+        "fulfillment": 45,
+        "reason": "bottlenecked by human"
+      }
+    ]
+  },
+  "resume": {
+    "meanFulfillment": 90,
+    "weakestLink": {
+      "stage": "validate",
+      "name": "Truth + tailoring",
+      "fulfillment": 75
+    },
+    "byStage": {
+      "generate": 95,
+      "validate": 75,
+      "execute": 99
+    },
+    "toolFrontierYear": 2022,
+    "stackSize": 3,
+    "gaps": []
+  },
+  "online-course": {
+    "meanFulfillment": 77,
+    "weakestLink": {
+      "stage": "validate",
+      "name": "Pedagogy review",
+      "fulfillment": 55
+    },
+    "byStage": {
+      "generate": 81,
+      "validate": 55,
+      "execute": 92
+    },
+    "toolFrontierYear": 2024,
+    "stackSize": 5,
+    "gaps": []
+  },
+  "social-pack": {
+    "meanFulfillment": 90,
+    "weakestLink": {
+      "stage": "generate",
+      "name": "Graphics + thumbnails",
+      "fulfillment": 85
+    },
+    "byStage": {
+      "generate": 89,
+      "validate": null,
+      "execute": 92
+    },
+    "toolFrontierYear": 2022,
+    "stackSize": 4,
+    "gaps": []
+  },
+  "infographic": {
+    "meanFulfillment": 81,
+    "weakestLink": {
+      "stage": "validate",
+      "name": "Accuracy check",
+      "fulfillment": 60
+    },
+    "byStage": {
+      "generate": 84,
+      "validate": 60,
+      "execute": 95
+    },
+    "toolFrontierYear": 2024,
+    "stackSize": 6,
+    "gaps": []
+  },
+  "brand-identity": {
+    "meanFulfillment": 76,
+    "weakestLink": {
+      "stage": "validate",
+      "name": "Stakeholder sign-off",
+      "fulfillment": 50
+    },
+    "byStage": {
+      "generate": 82,
+      "validate": 50,
+      "execute": 90
+    },
+    "toolFrontierYear": 2022,
+    "stackSize": 5,
+    "gaps": []
+  },
+  "illustrated-book": {
+    "meanFulfillment": 78,
+    "weakestLink": {
+      "stage": "validate",
+      "name": "Art direction pass",
+      "fulfillment": 55
+    },
+    "byStage": {
+      "generate": 84,
+      "validate": 55,
+      "execute": 88
+    },
+    "toolFrontierYear": 2022,
+    "stackSize": 4,
+    "gaps": []
+  },
+  "3d-asset": {
+    "meanFulfillment": 65,
+    "weakestLink": {
+      "stage": "validate",
+      "name": "Topology cleanup",
+      "fulfillment": 45
+    },
+    "byStage": {
+      "generate": 72,
+      "validate": 45,
+      "execute": 70
+    },
+    "toolFrontierYear": 2026,
+    "stackSize": 5,
+    "gaps": [
+      {
+        "stage": "validate",
+        "name": "Topology cleanup",
+        "fulfillment": 45,
+        "reason": "bottlenecked by human"
+      }
+    ]
+  },
+  "explainer-video": {
+    "meanFulfillment": 73,
+    "weakestLink": {
+      "stage": "validate",
+      "name": "Timing + polish",
+      "fulfillment": 50
+    },
+    "byStage": {
+      "generate": 79,
+      "validate": 50,
+      "execute": 85
+    },
+    "toolFrontierYear": 2025,
+    "stackSize": 7,
+    "gaps": []
+  },
+  "trailer": {
+    "meanFulfillment": 68,
+    "weakestLink": {
+      "stage": "validate",
+      "name": "Continuity + edit",
+      "fulfillment": 45
+    },
+    "byStage": {
+      "generate": 78,
+      "validate": 45,
+      "execute": 70
+    },
+    "toolFrontierYear": 2025,
+    "stackSize": 6,
+    "gaps": [
+      {
+        "stage": "validate",
+        "name": "Continuity + edit",
+        "fulfillment": 45,
+        "reason": "bottlenecked by human"
+      }
+    ]
+  },
+  "feature-film": {
+    "meanFulfillment": 48,
+    "weakestLink": {
+      "stage": "validate",
+      "name": "Direction + edit",
+      "fulfillment": 25
+    },
+    "byStage": {
+      "generate": 63,
+      "validate": 25,
+      "execute": 40
+    },
+    "toolFrontierYear": 2025,
+    "stackSize": 5,
+    "gaps": [
+      {
+        "stage": "validate",
+        "name": "Direction + edit",
+        "fulfillment": 25,
+        "reason": "bottlenecked by human"
+      },
+      {
+        "stage": "execute",
+        "name": "Score + distribution",
+        "fulfillment": 40,
+        "reason": "limited by Generative audio (Suno/Udio) (matured 2024)"
+      },
+      {
+        "stage": "generate",
+        "name": "Shots + VFX",
+        "fulfillment": 45,
+        "reason": "limited by Text-to-video (matured 2025)"
+      }
+    ]
+  },
+  "song": {
+    "meanFulfillment": 83,
+    "weakestLink": {
+      "stage": "validate",
+      "name": "Taste / mix pass",
+      "fulfillment": 65
+    },
+    "byStage": {
+      "generate": 87,
+      "validate": 65,
+      "execute": 95
+    },
+    "toolFrontierYear": 2024,
+    "stackSize": 5,
+    "gaps": []
+  },
+  "podcast": {
+    "meanFulfillment": 82,
+    "weakestLink": {
+      "stage": "validate",
+      "name": "Edit + taste",
+      "fulfillment": 60
+    },
+    "byStage": {
+      "generate": 86,
+      "validate": 60,
+      "execute": 95
+    },
+    "toolFrontierYear": 2023,
+    "stackSize": 5,
+    "gaps": []
+  },
+  "audiobook": {
+    "meanFulfillment": 81,
+    "weakestLink": {
+      "stage": "validate",
+      "name": "Pronunciation pass",
+      "fulfillment": 65
+    },
+    "byStage": {
+      "generate": 88,
+      "validate": 65,
+      "execute": 90
+    },
+    "toolFrontierYear": 2023,
+    "stackSize": 4,
+    "gaps": []
+  },
+  "music-album": {
+    "meanFulfillment": 79,
+    "weakestLink": {
+      "stage": "validate",
+      "name": "Mix/master + curation",
+      "fulfillment": 55
+    },
+    "byStage": {
+      "generate": 83,
+      "validate": 55,
+      "execute": 95
+    },
+    "toolFrontierYear": 2024,
+    "stackSize": 5,
+    "gaps": []
+  },
+  "chatbot-agent": {
+    "meanFulfillment": 81,
+    "weakestLink": {
+      "stage": "validate",
+      "name": "Eval + guardrails",
+      "fulfillment": 65
+    },
+    "byStage": {
+      "generate": 85,
+      "validate": 65,
+      "execute": 90
+    },
+    "toolFrontierYear": 2024,
+    "stackSize": 5,
+    "gaps": []
+  },
+  "saas-app": {
+    "meanFulfillment": 80,
+    "weakestLink": {
+      "stage": "validate",
+      "name": "Tests + review",
+      "fulfillment": 70
+    },
+    "byStage": {
+      "generate": 82,
+      "validate": 70,
+      "execute": 88
+    },
+    "toolFrontierYear": 2024,
+    "stackSize": 6,
+    "gaps": []
+  },
+  "mobile-app": {
+    "meanFulfillment": 67,
+    "weakestLink": {
+      "stage": "validate",
+      "name": "Device QA",
+      "fulfillment": 55
+    },
+    "byStage": {
+      "generate": 77,
+      "validate": 55,
+      "execute": 60
+    },
+    "toolFrontierYear": 2024,
+    "stackSize": 6,
+    "gaps": []
+  },
+  "indie-game": {
+    "meanFulfillment": 60,
+    "weakestLink": {
+      "stage": "validate",
+      "name": "Playtest + balance",
+      "fulfillment": 35
+    },
+    "byStage": {
+      "generate": 68,
+      "validate": 35,
+      "execute": 70
+    },
+    "toolFrontierYear": 2024,
+    "stackSize": 6,
+    "gaps": [
+      {
+        "stage": "validate",
+        "name": "Playtest + balance",
+        "fulfillment": 35,
+        "reason": "bottlenecked by human"
+      }
+    ]
+  },
+  "merch": {
+    "meanFulfillment": 77,
+    "weakestLink": {
+      "stage": "validate",
+      "name": "Mockup approval",
+      "fulfillment": 65
+    },
+    "byStage": {
+      "generate": 88,
+      "validate": 65,
+      "execute": 78
+    },
+    "toolFrontierYear": 2022,
+    "stackSize": 4,
+    "gaps": []
+  },
+  "physical-book": {
+    "meanFulfillment": 75,
+    "weakestLink": {
+      "stage": "validate",
+      "name": "Proof copy review",
+      "fulfillment": 60
+    },
+    "byStage": {
+      "generate": 90,
+      "validate": 60,
+      "execute": 75
+    },
+    "toolFrontierYear": 2022,
+    "stackSize": 5,
+    "gaps": []
+  },
+  "3d-print": {
+    "meanFulfillment": 53,
+    "weakestLink": {
+      "stage": "execute",
+      "name": "Post-process",
+      "fulfillment": 30
+    },
+    "byStage": {
+      "generate": 70,
+      "validate": 55,
+      "execute": 43
+    },
+    "toolFrontierYear": 2026,
+    "stackSize": 6,
+    "gaps": [
+      {
+        "stage": "execute",
+        "name": "Post-process",
+        "fulfillment": 30,
+        "reason": "bottlenecked by human"
+      }
+    ]
+  },
+  "board-game": {
+    "meanFulfillment": 58,
+    "weakestLink": {
+      "stage": "validate",
+      "name": "Playtest balance",
+      "fulfillment": 35
+    },
+    "byStage": {
+      "generate": 78,
+      "validate": 35,
+      "execute": 60
+    },
+    "toolFrontierYear": 2022,
+    "stackSize": 4,
+    "gaps": [
+      {
+        "stage": "validate",
+        "name": "Playtest balance",
+        "fulfillment": 35,
+        "reason": "bottlenecked by human"
+      }
+    ]
+  },
+  "furniture": {
+    "meanFulfillment": 51,
+    "weakestLink": {
+      "stage": "execute",
+      "name": "Assembly + finish",
+      "fulfillment": 25
+    },
+    "byStage": {
+      "generate": 75,
+      "validate": 55,
+      "execute": 38
+    },
+    "toolFrontierYear": 2022,
+    "stackSize": 5,
+    "gaps": [
+      {
+        "stage": "execute",
+        "name": "Assembly + finish",
+        "fulfillment": 25,
+        "reason": "bottlenecked by human"
+      }
+    ]
+  },
+  "house-design": {
+    "meanFulfillment": 60,
+    "weakestLink": {
+      "stage": "validate",
+      "name": "Code / permit compliance",
+      "fulfillment": 45
+    },
+    "byStage": {
+      "generate": 80,
+      "validate": 45,
+      "execute": 55
+    },
+    "toolFrontierYear": 2022,
+    "stackSize": 5,
+    "gaps": [
+      {
+        "stage": "validate",
+        "name": "Code / permit compliance",
+        "fulfillment": 45,
+        "reason": "bottlenecked by human"
+      }
+    ]
+  },
+  "live-event": {
+    "meanFulfillment": 39,
+    "weakestLink": {
+      "stage": "execute",
+      "name": "Run the event",
+      "fulfillment": 10
+    },
+    "byStage": {
+      "generate": 85,
+      "validate": 40,
+      "execute": 15
+    },
+    "toolFrontierYear": 2024,
+    "stackSize": 3,
+    "gaps": [
+      {
+        "stage": "execute",
+        "name": "Run the event",
+        "fulfillment": 10,
+        "reason": "bottlenecked by human"
+      },
+      {
+        "stage": "execute",
+        "name": "Physical production",
+        "fulfillment": 20,
+        "reason": "bottlenecked by human"
+      },
+      {
+        "stage": "validate",
+        "name": "Venue + logistics",
+        "fulfillment": 40,
+        "reason": "bottlenecked by human"
+      }
+    ]
+  },
+  "gadget": {
+    "meanFulfillment": 40,
+    "weakestLink": {
+      "stage": "execute",
+      "name": "Enclosure + QA",
+      "fulfillment": 20
+    },
+    "byStage": {
+      "generate": 65,
+      "validate": 35,
+      "execute": 30
+    },
+    "toolFrontierYear": 2022,
+    "stackSize": 4,
+    "gaps": [
+      {
+        "stage": "execute",
+        "name": "Enclosure + QA",
+        "fulfillment": 20,
+        "reason": "bottlenecked by human"
+      },
+      {
+        "stage": "validate",
+        "name": "Prototype + test",
+        "fulfillment": 35,
+        "reason": "bottlenecked by human"
+      },
+      {
+        "stage": "execute",
+        "name": "PCB fab + assembly",
+        "fulfillment": 40,
+        "reason": "bottlenecked by pcb fab service"
+      }
+    ]
+  },
+  "restaurant-meal": {
+    "meanFulfillment": 36,
+    "weakestLink": {
+      "stage": "execute",
+      "name": "Serve",
+      "fulfillment": 15
+    },
+    "byStage": {
+      "generate": 85,
+      "validate": 20,
+      "execute": 20
+    },
+    "toolFrontierYear": 2030,
+    "stackSize": 3,
+    "gaps": [
+      {
+        "stage": "execute",
+        "name": "Serve",
+        "fulfillment": 15,
+        "reason": "bottlenecked by human"
+      },
+      {
+        "stage": "validate",
+        "name": "Taste + iterate",
+        "fulfillment": 20,
+        "reason": "bottlenecked by human"
+      },
+      {
+        "stage": "execute",
+        "name": "Cook",
+        "fulfillment": 25,
+        "reason": "bottlenecked by kitchen robotics (early)"
+      }
+    ]
+  },
+  "house-built": {
+    "meanFulfillment": 29,
+    "weakestLink": {
+      "stage": "execute",
+      "name": "Trades + finishing",
+      "fulfillment": 10
+    },
+    "byStage": {
+      "generate": 70,
+      "validate": 20,
+      "execute": 13
+    },
+    "toolFrontierYear": 2035,
+    "stackSize": 5,
+    "gaps": [
+      {
+        "stage": "execute",
+        "name": "Trades + finishing",
+        "fulfillment": 10,
+        "reason": "bottlenecked by human"
+      },
+      {
+        "stage": "execute",
+        "name": "Site build",
+        "fulfillment": 15,
+        "reason": "bottlenecked by construction robotics (early)"
+      },
+      {
+        "stage": "validate",
+        "name": "Permits + inspections",
+        "fulfillment": 20,
+        "reason": "bottlenecked by human"
+      }
+    ]
+  },
+  "new-drug": {
+    "meanFulfillment": 29,
+    "weakestLink": {
+      "stage": "execute",
+      "name": "Manufacture + approval",
+      "fulfillment": 8
+    },
+    "byStage": {
+      "generate": 70,
+      "validate": 10,
+      "execute": 8
+    },
+    "toolFrontierYear": 2021,
+    "stackSize": 3,
+    "gaps": [
+      {
+        "stage": "execute",
+        "name": "Manufacture + approval",
+        "fulfillment": 8,
+        "reason": "bottlenecked by human"
+      },
+      {
+        "stage": "validate",
+        "name": "Clinical trials",
+        "fulfillment": 10,
+        "reason": "bottlenecked by human"
+      }
+    ]
+  },
+  "car": {
+    "meanFulfillment": 27,
+    "weakestLink": {
+      "stage": "execute",
+      "name": "Tooling + assembly line",
+      "fulfillment": 8
+    },
+    "byStage": {
+      "generate": 60,
+      "validate": 12,
+      "execute": 8
+    },
+    "toolFrontierYear": 2005,
+    "stackSize": 5,
+    "gaps": [
+      {
+        "stage": "execute",
+        "name": "Tooling + assembly line",
+        "fulfillment": 8,
+        "reason": "bottlenecked by heavy industry / manufacturing"
+      },
+      {
+        "stage": "validate",
+        "name": "Crash + regulatory",
+        "fulfillment": 12,
+        "reason": "bottlenecked by human"
+      }
+    ]
+  },
+  "spacecraft": {
+    "meanFulfillment": 26,
+    "weakestLink": {
+      "stage": "execute",
+      "name": "Fabricate + launch",
+      "fulfillment": 5
+    },
+    "byStage": {
+      "generate": 60,
+      "validate": 12,
+      "execute": 5
+    },
+    "toolFrontierYear": 2026,
+    "stackSize": 3,
+    "gaps": [
+      {
+        "stage": "execute",
+        "name": "Fabricate + launch",
+        "fulfillment": 5,
+        "reason": "bottlenecked by human"
+      },
+      {
+        "stage": "validate",
+        "name": "Qualification testing",
+        "fulfillment": 12,
+        "reason": "bottlenecked by human"
+      }
+    ]
+  },
+  "skyscraper": {
+    "meanFulfillment": 24,
+    "weakestLink": {
+      "stage": "execute",
+      "name": "Construction",
+      "fulfillment": 6
+    },
+    "byStage": {
+      "generate": 55,
+      "validate": 12,
+      "execute": 6
+    },
+    "toolFrontierYear": 2022,
+    "stackSize": 5,
+    "gaps": [
+      {
+        "stage": "execute",
+        "name": "Construction",
+        "fulfillment": 6,
+        "reason": "bottlenecked by human"
+      },
+      {
+        "stage": "validate",
+        "name": "Permits + engineering sign-off",
+        "fulfillment": 12,
+        "reason": "bottlenecked by human"
+      }
+    ]
+  }
+};
+
+window.IRS_DATA = { DOMAINS, STAGES, ARTIFACTS, ESTIMATES };

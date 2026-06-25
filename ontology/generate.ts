@@ -12,8 +12,11 @@
 import { writeFileSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { validateOntology, ARTIFACTS, TOOLS } from "./index.js";
+import { validateOntology, ARTIFACTS, TOOLS, getArtifacts } from "./index.js";
 import { DOMAIN_LABELS, STAGE_LABELS } from "./schema.js";
+// Layer 2 reused at build time: precompute each artifact's estimate so the
+// build-free website can show the engine's output without shipping the TS.
+import { estimate } from "../engine/estimator.js";
 
 // Refuse to generate from an invalid ontology.
 const result = validateOntology();
@@ -46,6 +49,27 @@ const renderedArtifacts = ARTIFACTS.map((a) => ({
   })),
 }));
 
+// Precompute a compact estimate per artifact using the real estimator, so the
+// detail panel (app.js) renders the SAME numbers the CLI produces. We trim the
+// full estimate to what the panel needs (the step graph is already in ARTIFACTS).
+const estimatesById: Record<string, unknown> = {};
+for (const a of getArtifacts()) {
+  const e = estimate(a);
+  estimatesById[a.id] = {
+    meanFulfillment: e.rollup.meanFulfillment,
+    weakestLink: e.rollup.weakestLink,
+    byStage: e.rollup.byStage,
+    toolFrontierYear: e.rollup.toolFrontierYear,
+    stackSize: e.stack.length,
+    gaps: e.gaps.map((g) => ({
+      stage: g.stage,
+      name: g.name,
+      fulfillment: g.fulfillment,
+      reason: g.reason,
+    })),
+  };
+}
+
 const banner =
   "// data.js — GENERATED FILE. Do not edit by hand.\n" +
   "// Source of truth: ontology/*.ts (TypeScript + Zod). Regenerate with:\n" +
@@ -57,7 +81,9 @@ const body =
   `const DOMAINS = ${JSON.stringify(DOMAIN_LABELS, null, 2)};\n\n` +
   `const STAGES = ${JSON.stringify(STAGE_LABELS, null, 2)};\n\n` +
   `const ARTIFACTS = ${JSON.stringify(renderedArtifacts, null, 2)};\n\n` +
-  `window.IRS_DATA = { DOMAINS, STAGES, ARTIFACTS };\n`;
+  // ESTIMATES is keyed by artifact id; app.js reads it for the detail panel.
+  `const ESTIMATES = ${JSON.stringify(estimatesById, null, 2)};\n\n` +
+  `window.IRS_DATA = { DOMAINS, STAGES, ARTIFACTS, ESTIMATES };\n`;
 
 // Write data.js to the repo root.
 const outPath = join(repoRoot, "data.js");

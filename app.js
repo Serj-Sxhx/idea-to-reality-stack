@@ -13,7 +13,10 @@
 
   // Pull the dataset that data.js attached to window (load order is set in
   // index.html: data.js before app.js).
-  const { DOMAINS, STAGES, ARTIFACTS } = window.IRS_DATA;
+  // ESTIMATES is keyed by artifact id and precomputed by the Layer-2 estimator
+  // at build time (see ontology/generate.ts). It may be absent on older data.js,
+  // so we default it to {} and guard before rendering.
+  const { DOMAINS, STAGES, ARTIFACTS, ESTIMATES = {} } = window.IRS_DATA;
 
   // Colour per domain. Keys match the `domain` field on each artifact in data.js.
   const DOMAIN_COLORS = {
@@ -232,6 +235,48 @@
     html += '<div class="score"><div class="num">' + a.ease + '</div><div class="lbl">Ease</div></div>';
     html += '<div class="score"><div class="num">' + a.humanTouchpoints + '</div><div class="lbl">Human steps</div></div>';
     html += "</div>";
+
+    // Engine estimate (Layer 2): the computed rollups + gaps for this artifact,
+    // rendered straight from the precomputed ESTIMATES map so the panel matches
+    // the `npm run make` CLI output exactly. Guarded in case data.js is older.
+    const est = ESTIMATES[a.id];
+    if (est) {
+      html += '<div class="estimate">';
+      html += '<div class="estimate-head">Engine estimate <span class="badge">make("' + a.name + '")</span></div>';
+
+      html += '<div class="scores">';
+      html += '<div class="score"><div class="num">' + est.meanFulfillment + '%</div><div class="lbl">Mean fulfillment</div></div>';
+      html += '<div class="score"><div class="num">' + est.toolFrontierYear + '</div><div class="lbl">Tools exist by</div></div>';
+      html += '<div class="score"><div class="num">' + est.gaps.length + '</div><div class="lbl">Human gaps</div></div>';
+      html += "</div>";
+
+      // Weakest link = the single step that most gates end-to-end completion.
+      html += '<div class="estimate-row"><strong>Weakest link:</strong> ' +
+        est.weakestLink.name + " (" + est.weakestLink.stage + ") \u2014 " +
+        est.weakestLink.fulfillment + "%</div>";
+
+      // Per-stage rollup, skipping stages with no steps (null).
+      const stageBits = Object.keys(est.byStage)
+        .filter((k) => est.byStage[k] !== null)
+        .map((k) => STAGES[k] + " " + est.byStage[k] + "%");
+      html += '<div class="estimate-row"><strong>By stage:</strong> ' + stageBits.join(" \u00b7 ") + "</div>";
+
+      // The human-in-the-loop gaps with the estimator's plain-English reason.
+      html += '<div class="estimate-sub">Human-in-the-loop gaps</div>';
+      if (est.gaps.length === 0) {
+        html += '<div class="estimate-row muted">None \u2014 AI can take every step past 50% unaided.</div>';
+      } else {
+        est.gaps.forEach((g) => {
+          html += '<div class="gap-row"><span class="gap-step">' + g.name +
+            " (" + g.stage + ")</span> <span class=\"gap-pct\">" + g.fulfillment +
+            "%</span><div class=\"gap-reason\">" + g.reason + "</div></div>";
+        });
+      }
+      html += "</div>";
+    }
+
+    // The production graph (authored steps) follows the computed estimate.
+    html += '<div class="graph-sub">Production graph</div>';
 
     // Steps grouped by stage, in canonical order.
     Object.keys(STAGES).forEach((stageKey) => {
