@@ -168,14 +168,23 @@
       const cy = yFor(a.completeness);
 
       // Ready vs future styling is driven by the frontier-year slider.
+      // Ready  = solid filled dot (CSS adds a dark stroke via .frontier-ready).
+      // Future = hollow ring in the domain colour so it stays clearly visible
+      //          (the old near-invisible faded fill made these look missing).
       const ready = a.aiReadyYear <= state.frontierYear;
       const cls = "dot " + (ready ? "frontier-ready" : "frontier-future");
 
-      const circle = svgEl("circle", {
+      const attrs = {
         class: cls, cx: cx, cy: cy, r: rFor(a.humanTouchpoints),
         fill: DOMAIN_COLORS[a.domain],
-        "fill-opacity": ready ? 0.85 : 0.5,
-      });
+        "fill-opacity": ready ? 0.85 : 0.18,
+      };
+      if (!ready) {
+        // Visible coloured outline marks a "not yet on the frontier" artifact.
+        attrs.stroke = DOMAIN_COLORS[a.domain];
+        attrs["stroke-width"] = 2;
+      }
+      const circle = svgEl("circle", attrs);
 
       // Hover -> floating tooltip with the headline numbers.
       circle.addEventListener("mousemove", (ev) => {
@@ -195,10 +204,14 @@
 
       svg.appendChild(circle);
 
-      // Short label next to each dot for at-a-glance reading.
-      const label = svgEl("text", { class: "dot-label", x: cx + rFor(a.humanTouchpoints) + 4, y: cy + 4 });
-      label.textContent = a.name;
-      svg.appendChild(label);
+      // Label only the "ready" dots to avoid clutter now that there are many
+      // artifacts. Future (hollow) dots reveal their name on hover via the
+      // tooltip, and gain a permanent label once the slider passes their year.
+      if (ready) {
+        const label = svgEl("text", { class: "dot-label", x: cx + rFor(a.humanTouchpoints) + 4, y: cy + 4 });
+        label.textContent = a.name;
+        svg.appendChild(label);
+      }
     });
   }
 

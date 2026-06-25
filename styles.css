@@ -196,8 +196,14 @@ code {
 }
 .dot:hover { transform: scale(1.18); }
 .dot.frontier-ready { stroke: var(--ink); stroke-width: 2; }
-.dot.frontier-future { opacity: .35; }
-.dot-label { font-size: 11px; fill: var(--ink-soft); pointer-events: none; }
+/* Future dots are hollow coloured rings (stroke set in app.js); keep them
+   clearly visible rather than nearly transparent. */
+.dot.frontier-future { opacity: .85; }
+/* White halo (paint-order: stroke) keeps labels readable over dot clusters. */
+.dot-label {
+  font-size: 11px; fill: var(--ink); pointer-events: none;
+  stroke: #fff; stroke-width: 3px; paint-order: stroke;
+}
 .axis-label { font-size: 13px; fill: var(--ink); font-weight: 700; }
 .axis-tick { font-size: 11px; fill: var(--ink-soft); }
 .grid-line { stroke: var(--line); stroke-width: 1; }
