@@ -91,6 +91,9 @@ section { padding: 56px 0; border-bottom: 1px solid var(--line); }
 .prose p { max-width: 720px; font-size: 18px; }
 .prose-muted { color: var(--ink-soft); font-size: 16px !important; }
 
+/* Sub-heading inside a prose section (e.g. "How a run works"). */
+.subhead { margin-top: 30px; font-size: 20px; }
+
 /* Numbered "how it works" steps. */
 .steps { max-width: 760px; padding-left: 22px; }
 .steps li { margin: 12px 0; font-size: 18px; }

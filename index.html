@@ -31,6 +31,7 @@
           <li><strong>The thesis:</strong> every artifact (an eBook, a song, a SaaS app, a house) can be plotted by two axes &mdash; <strong>completeness</strong> (how much AI + a human can finish end-to-end) and <strong>ease</strong> (how little real-world friction blocks it).</li>
           <li><strong>The engine:</strong> say &ldquo;make X&rdquo; &rarr; it decomposes X into a production graph, maps each step to the best tool/agent, scores the fulfillment %, and shows you exactly where a human must step in.</li>
           <li><strong>The frontier moves:</strong> as models improve, artifacts migrate up-and-right. Drag the year slider on the map below to watch the frontier advance.</li>
+          <li><strong>Coming next:</strong> a <a href="#benchmark">benchmark any stack can plug into</a> that plots <em>your</em> frontier line on the map, with a leaderboard.</li>
           <li><strong>Try it:</strong> <a href="#map">click any dot on the live map</a> to expand its stack and human-in-the-loop gaps.</li>
         </ul>
       </aside>
@@ -182,6 +183,54 @@
       <p class="prose-muted">
         Honesty rule: every fulfillment % cites the tool and maturity it's based on.
         The map shows the capability frontier as it actually is, not as we wish it.
+      </p>
+    </section>
+
+    <!-- ===================================================================
+         SECTION: FUTURE PROJECT — THE BENCHMARK / EVAL + LEADERBOARD
+         Describes the planned eval any stack can plug into; results draw that
+         stack's own frontier line overlaid on the same ease x completeness map.
+         =================================================================== -->
+    <section id="benchmark" class="prose">
+      <p class="eyebrow">Coming next</p>
+      <h2>The benchmark: plot your stack's frontier</h2>
+      <p>
+        The map above shows the <em>global</em> frontier. The next build is an
+        open <strong>eval that any stack can plug into</strong> &mdash; an agent,
+        a model, a toolchain, even a human + AI pair, bring your own API key.
+        It runs a battery of creation tasks, measures how much each one your
+        stack can actually finish, and draws <strong>your own frontier line
+        overlaid on this exact map</strong>.
+      </p>
+
+      <div class="cards">
+        <div class="card">
+          <h3>Plug in any stack</h3>
+          <p>Submit a stack manifest (model + tools + keys) and a thin adapter that turns a task brief into produced artifacts plus a run-log of the steps it took.</p>
+        </div>
+        <div class="card">
+          <h3>Four scored axes</h3>
+          <p><strong>Completeness</strong> (steps finished unaided), <strong>quality</strong> (rubric / judged), <strong>autonomy &amp; ease</strong> (human steps, cost, time), and <strong>honesty</strong> (did it report its own gaps instead of overclaiming?).</p>
+        </div>
+        <div class="card">
+          <h3>Your frontier, overlaid</h3>
+          <p>Results render as a contour on the map above &mdash; the line where your stack's completeness &times; quality drops off. That line <em>is</em> &ldquo;where your capabilities end up.&rdquo;</p>
+        </div>
+      </div>
+
+      <h3 class="subhead">How a run works</h3>
+      <ol class="steps">
+        <li><strong>Pick a task set</strong> &mdash; start with auto-gradeable digital artifacts (blog post, landing page, small web app, song, eBook) with deterministic verification.</li>
+        <li><strong>Your adapter runs each brief</strong> and drops artifacts + a step log into an output folder.</li>
+        <li><strong>The harness verifies</strong> &mdash; programmatic checks first, judged quality second, with provenance (model versions, cost, timestamp) recorded.</li>
+        <li><strong>Scores roll up</strong> into the four axes and a composite reach.</li>
+        <li><strong>Your frontier is drawn</strong> on the map and added to a dated <strong>leaderboard</strong>, so different stacks &mdash; and the same stack over time &mdash; can be compared as the frontier moves.</li>
+      </ol>
+
+      <p class="prose-muted">
+        Same honesty rule applies: physical artifacts (house, drug, spacecraft)
+        are scored only on their digital precursors, with the real-world remainder
+        labelled unevaluated rather than faked.
       </p>
     </section>
 
