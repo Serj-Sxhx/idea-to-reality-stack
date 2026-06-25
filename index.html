@@ -107,15 +107,16 @@
         </figure>
       </div>
     </section>
+  </main>
 
-    <!-- ===================================================================
-         SECTION: THE LIVE MAP  (the main interactive element)
-         The empty containers below are populated by app.js at runtime.
-         =================================================================== -->
-    <!-- full-bleed: this section breaks out of the centered .wrap column so the
-         map can span the full viewport width (see styles.css .map-section.full-bleed).
-         .map-inner keeps the content from getting absurdly wide on big screens. -->
-    <section id="map" class="map-section full-bleed">
+  <!-- ===================================================================
+       SECTION: THE LIVE MAP  (the main interactive element)
+       This section lives OUTSIDE <main class="wrap"> so it is a direct child
+       of <body> and fills the full viewport width. The .map-inner below adds
+       comfortable side padding and a large cap for ultra-wide monitors.
+       The empty containers are populated by app.js at runtime.
+       =================================================================== -->
+  <section id="map" class="map-section">
       <div class="map-inner">
         <h2>The live map: ease &times; completeness</h2>
         <p class="prose">
@@ -151,8 +152,9 @@
           </aside>
         </div>
       </div>
-    </section>
+  </section>
 
+  <main class="wrap">
     <!-- ===================================================================
          SECTION: HOW THE ENGINE WORKS
          =================================================================== -->

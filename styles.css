@@ -137,19 +137,19 @@ code {
 .ba-tag-now { color: #fff; background: var(--accent); }
 
 /* ---------- Map section ---------- */
-.map-section { background: linear-gradient(180deg, #fff, var(--bg)); }
-
-/* Full-bleed: break out of the parent .wrap column to span the whole viewport.
-   The negative margin trick widens the section to 100vw while staying centered. */
-.full-bleed {
-  width: 100vw;
-  margin-left: calc(50% - 50vw);
-  margin-right: calc(50% - 50vw);
+/* This section is a direct child of <body> (not inside .wrap), so it already
+   spans the full viewport width. We just add background + side padding. */
+.map-section {
+  /* Slightly tinted so the full-width band is actually visible against the page. */
+  background: linear-gradient(180deg, var(--accent-soft), var(--bg));
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
   padding-left: 24px;
   padding-right: 24px;
 }
-/* Keep the map content from stretching uncomfortably wide on large monitors. */
-.map-inner { max-width: 1500px; margin: 0 auto; }
+/* No max-width cap: the map content fills (nearly) the entire viewport so it
+   reads as the page's centrepiece. Small side padding keeps it off the edges. */
+.map-inner { max-width: none; margin: 0; }
 
 .map-controls {
   display: flex; justify-content: space-between; align-items: center;
@@ -253,6 +253,7 @@ code {
 @media (max-width: 860px) {
   .cards { grid-template-columns: 1fr; }
   .before-after { grid-template-columns: 1fr; }
+  .map-section { padding-left: 20px; padding-right: 20px; }
   .map-layout { grid-template-columns: 1fr; }
   .detail { position: static; }
   .map-controls { flex-direction: column; align-items: flex-start; }
