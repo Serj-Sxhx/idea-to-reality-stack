@@ -72,5 +72,15 @@ export function validateOntology(): ValidationResult {
   };
 }
 
+// Validated accessors for downstream consumers (e.g. the engine in Phase 2).
+// These Zod-parse the source-of-truth consts, so callers get plain mutable
+// arrays AND a runtime guarantee the data is well-formed before use.
+export function getArtifacts(): Artifact[] {
+  return z.array(ArtifactSchema).parse(ARTIFACTS);
+}
+export function getTools(): Tool[] {
+  return z.array(ToolSchema).parse(TOOLS);
+}
+
 export { ARTIFACTS, TOOLS };
 export * from "./schema.js";

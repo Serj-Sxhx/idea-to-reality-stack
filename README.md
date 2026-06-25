@@ -4,16 +4,53 @@ A static, dependency-free landing page that is part blog, part live map. It
 explains the goal of the **Creation Engine** project and lets visitors explore
 output artifacts on an interactive **ease × completeness** map.
 
+## Architecture
+
+The project is one portable knowledge layer with thin clients over it:
+
+- **Layer 1 — Ontology** (`ontology/`): the typed, Zod-validated source of truth (artifacts, a tool registry, and production graphs). See [Ontology](#layer-1--the-ontology).
+- **Layer 2 — Estimator** (`engine/`): a headless `make(X)` planner that turns a target into a plan, stack, rollups, and human-in-the-loop gaps. See [Engine](#layer-2--the-engine).
+- **Layer 3 — Clients**: this static site (the live map + blog). `data.js` is **generated** from the ontology, so the site stays dependency-free.
+
 ## Files
 
-| File | Role |
+| File / dir | Role |
 |------|------|
-| `index.html` | The long landing page: TLDR, blog sections, map container, architecture, goal. |
+| `ontology/` | **Source of truth** (TypeScript + Zod): `schema.ts`, `tools.ts` (tool registry), `artifacts.ts` (catalogue), `validate.ts`, `generate.ts`. |
+| `engine/` | **The estimator**: `estimator.ts` (pure logic), `cli.ts` (`make` command), `estimator.test.ts`. |
+| `data.js` | **GENERATED** from the ontology by `npm run build:data`. Do not edit by hand. |
+| `index.html` | The landing page: TLDR, blog sections, map container, ontology section, architecture, goal. Stat numbers are auto-synced by the generator. |
 | `styles.css` | All styling (light theme, solarpunk-green accent, responsive). |
-| `data.js` | The **stack ontology** seed: every artifact with its ease/completeness, production graph, and per-step tool + fulfillment %. This is the data layer — edit here to change the map. |
-| `app.js` | Renders the interactive SVG scatter map + detail panel from `data.js`. Handles hover tooltips, click-to-expand, domain filters, and the frontier-year slider. |
+| `app.js` | Renders the interactive SVG scatter map + detail panel from `data.js`. |
 
-There is **no build step** and **no dependencies** — just HTML, CSS, and vanilla JS.
+The **website** has no build step and no runtime dependencies. The **ontology + engine** use TypeScript/Zod and run via `tsx` (dev-only).
+
+## Layer 1 — the ontology
+
+```bash
+npm install          # one-time: installs zod + dev tooling (tsx, typescript)
+npm run validate     # Zod-validate the ontology + check tool-id integrity
+npm run build:data   # validate, then regenerate data.js AND sync website stats
+```
+
+The honesty rule is mechanical: every step must cite at least one tool, and
+`validate` fails if a step references a tool id that isn't in the registry, so
+`build:data` refuses to publish bad data. Edit artifacts/tools in `ontology/`,
+never `data.js`.
+
+## Layer 2 — the engine
+
+```bash
+npm run make -- "blog post"          # human-readable estimate
+npm run make -- "house built" --json # machine-readable (for agents)
+npm run make -- --list               # list every artifact you can ask for
+npm test                             # run the estimator test suite
+```
+
+`make(X)` returns: the ordered plan (generate → validate → execute), the unique
+tool stack, the authored map coordinates, rollups computed from the graph (mean
+fulfillment, weakest link, per-stage, tool-frontier year), and the
+human-in-the-loop gaps (steps under 50% fulfillment, weakest first).
 
 ## Run locally
 
@@ -51,12 +88,16 @@ path.
 
 ## Extending the map
 
-Add or edit artifacts in `data.js` (`ARTIFACTS` array). Each entry needs:
+Edit the **ontology**, not `data.js`. Add or edit entries in
+`ontology/artifacts.ts`. Each artifact needs:
 
 - `completeness` (0–100) and `ease` (0–100) → its position on the map
 - `humanTouchpoints` → dot size
 - `aiReadyYear` → when it lights up as the frontier slider advances
-- `steps[]` → the production graph; any step under 50% fulfillment is flagged as
-  a human-in-the-loop gap in the detail panel.
+- `steps[]` → the production graph; each step cites `toolIds` (must exist in
+  `ontology/tools.ts`) and a `fulfillment` %. Any step under 50% is flagged as a
+  human-in-the-loop gap.
 
-`app.js` reads everything from that array, so no other file needs changing.
+Then run `npm run build:data` to re-validate and regenerate `data.js` (and the
+website stats). `app.js` reads everything from `data.js`, so no other file needs
+changing.

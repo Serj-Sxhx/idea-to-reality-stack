@@ -7,7 +7,9 @@
   "scripts": {
     "validate": "tsx ontology/validate.ts",
     "generate": "tsx ontology/generate.ts",
-    "build:data": "npm run validate && npm run generate"
+    "build:data": "npm run validate && npm run generate",
+    "make": "tsx engine/cli.ts",
+    "test": "node --import tsx --test engine/*.test.ts"
   },
   "license": "MIT",
   "dependencies": {

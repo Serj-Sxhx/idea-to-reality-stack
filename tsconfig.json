@@ -9,5 +9,5 @@
     "skipLibCheck": true,
     "types": ["node"]
   },
-  "include": ["ontology/**/*.ts"]
+  "include": ["ontology/**/*.ts", "engine/**/*.ts"]
 }
