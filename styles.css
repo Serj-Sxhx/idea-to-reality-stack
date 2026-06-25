@@ -1,0 +1,212 @@
+/* styles.css
+   ---------------------------------------------------------------------------
+   All styling for index.html. Light, editorial theme with a solarpunk-green
+   accent. Class names here match the markup in index.html and the elements
+   that app.js injects (chart dots, detail panel, legend chips).
+   --------------------------------------------------------------------------- */
+
+/* Design tokens. Tweak these to re-theme the whole page in one place. */
+:root {
+  --bg: #fbfaf6;          /* warm off-white page background */
+  --surface: #ffffff;     /* cards / panels */
+  --ink: #1c2620;         /* near-black green-tinted text */
+  --ink-soft: #55665d;    /* muted body text */
+  --accent: #1f7a4d;      /* solarpunk green */
+  --accent-soft: #e6f2ea; /* green tint for fills */
+  --line: #e2e0d6;        /* hairline borders */
+  --shadow: 0 1px 2px rgba(0,0,0,.04), 0 8px 24px rgba(0,0,0,.06);
+  --radius: 14px;
+  --maxw: 1080px;
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  color: var(--ink);
+  background: var(--bg);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Shared content width container (used by hero, main, footer). */
+.wrap { width: 100%; max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
+
+a { color: var(--accent); }
+
+/* ---------- Hero + TLDR ---------- */
+.hero {
+  background:
+    radial-gradient(1200px 400px at 80% -10%, var(--accent-soft), transparent 60%),
+    linear-gradient(180deg, #ffffff 0%, var(--bg) 100%);
+  border-bottom: 1px solid var(--line);
+  padding: 72px 0 56px;
+}
+.eyebrow {
+  text-transform: uppercase; letter-spacing: .14em; font-size: 13px;
+  color: var(--accent); font-weight: 700; margin: 0 0 12px;
+}
+.hero h1 {
+  font-size: clamp(40px, 7vw, 76px); line-height: 1.02; margin: 0 0 20px;
+  letter-spacing: -0.02em; font-weight: 800;
+}
+.hero h1 .accent { color: var(--accent); }
+.lede {
+  font-size: clamp(18px, 2.4vw, 22px); max-width: 640px; color: var(--ink-soft);
+  margin: 0 0 28px;
+}
+
+/* TLDR callout box. */
+.tldr {
+  background: var(--surface); border: 1px solid var(--line);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius); padding: 20px 24px; box-shadow: var(--shadow);
+  max-width: 760px;
+}
+.tldr h2 {
+  margin: 0 0 10px; font-size: 14px; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--accent);
+}
+.tldr ul { margin: 0; padding-left: 18px; }
+.tldr li { margin: 8px 0; color: var(--ink-soft); }
+.tldr strong { color: var(--ink); }
+
+.hero-cta { margin-top: 28px; display: flex; gap: 12px; flex-wrap: wrap; }
+.btn {
+  display: inline-block; background: var(--accent); color: #fff;
+  text-decoration: none; padding: 12px 22px; border-radius: 999px;
+  font-weight: 600; border: 1px solid var(--accent);
+}
+.btn-ghost { background: transparent; color: var(--accent); }
+
+/* ---------- Prose sections ---------- */
+section { padding: 56px 0; border-bottom: 1px solid var(--line); }
+.prose h2, .map-section h2 {
+  font-size: clamp(26px, 3.6vw, 36px); margin: 0 0 18px; letter-spacing: -0.01em;
+}
+.prose p { max-width: 720px; font-size: 18px; }
+.prose-muted { color: var(--ink-soft); font-size: 16px !important; }
+
+/* Numbered "how it works" steps. */
+.steps { max-width: 760px; padding-left: 22px; }
+.steps li { margin: 12px 0; font-size: 18px; }
+
+/* Card grid (used in origin + architecture sections). */
+.cards {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 18px; margin-top: 26px;
+}
+.card {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: 22px; box-shadow: var(--shadow);
+}
+.card h3 { margin: 0 0 8px; font-size: 17px; }
+.card p { margin: 0; color: var(--ink-soft); font-size: 15px; }
+code {
+  background: var(--accent-soft); color: var(--accent);
+  padding: 1px 6px; border-radius: 6px; font-size: 13px;
+}
+
+/* ---------- Map section ---------- */
+.map-section { background: linear-gradient(180deg, #fff, var(--bg)); }
+
+.map-controls {
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 20px; flex-wrap: wrap; margin: 18px 0 12px;
+}
+/* Legend chips are injected by app.js -> buildControls(). */
+.legend { display: flex; gap: 8px; flex-wrap: wrap; }
+.legend .chip {
+  display: inline-flex; align-items: center; gap: 7px;
+  border: 1px solid var(--line); background: var(--surface);
+  padding: 6px 12px; border-radius: 999px; cursor: pointer;
+  font-size: 13px; font-weight: 600; user-select: none;
+}
+.legend .chip .swatch {
+  width: 11px; height: 11px; border-radius: 50%;
+}
+/* Dimmed state when a domain is toggled off. */
+.legend .chip.off { opacity: .35; }
+
+.frontier-control { font-size: 14px; color: var(--ink-soft); }
+.frontier-control input[type="range"] { width: 220px; vertical-align: middle; }
+
+/* Chart + detail layout. */
+.map-layout {
+  display: grid; grid-template-columns: 1.7fr 1fr; gap: 20px; align-items: start;
+}
+.chart {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius); box-shadow: var(--shadow); padding: 8px;
+  min-height: 420px;
+}
+.chart svg { width: 100%; height: auto; display: block; }
+
+/* The SVG dots + their hover/active behaviour (elements created in app.js). */
+.dot { cursor: pointer; transition: transform .08s ease; }
+.dot:hover { transform: scale(1.12); transform-origin: center; }
+.dot.frontier-ready { stroke: var(--ink); stroke-width: 2; }
+.dot.frontier-future { opacity: .35; }
+.dot-label { font-size: 11px; fill: var(--ink-soft); pointer-events: none; }
+.axis-label { font-size: 13px; fill: var(--ink); font-weight: 700; }
+.axis-tick { font-size: 11px; fill: var(--ink-soft); }
+.grid-line { stroke: var(--line); stroke-width: 1; }
+.frontier-line { stroke: var(--accent); stroke-width: 2; stroke-dasharray: 6 6; opacity: .7; }
+
+/* Floating tooltip (created by app.js). */
+.tooltip {
+  position: fixed; pointer-events: none; background: var(--ink); color: #fff;
+  padding: 6px 10px; border-radius: 8px; font-size: 13px; z-index: 50;
+  opacity: 0; transition: opacity .1s ease; white-space: nowrap;
+}
+
+/* Detail panel (filled by app.js -> renderDetail()). */
+.detail {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius); box-shadow: var(--shadow); padding: 22px;
+  position: sticky; top: 16px;
+}
+.detail-hint { color: var(--ink-soft); margin: 0; }
+.detail h3 { margin: 0 0 4px; font-size: 22px; }
+.detail .domain-tag {
+  display: inline-block; font-size: 12px; font-weight: 700; color: var(--accent);
+  background: var(--accent-soft); padding: 3px 10px; border-radius: 999px;
+  margin-bottom: 14px;
+}
+.detail .scores { display: flex; gap: 18px; margin-bottom: 16px; }
+.detail .score .num { font-size: 26px; font-weight: 800; }
+.detail .score .lbl { font-size: 12px; color: var(--ink-soft); text-transform: uppercase; letter-spacing: .08em; }
+
+/* Step rows in the detail panel. */
+.stage-group { margin-top: 14px; }
+.stage-group .stage-name {
+  font-size: 12px; text-transform: uppercase; letter-spacing: .1em;
+  color: var(--accent); font-weight: 700; margin-bottom: 6px;
+}
+.step-row { margin: 8px 0; }
+.step-row .step-top { display: flex; justify-content: space-between; gap: 8px; font-size: 14px; }
+.step-row .step-tool { color: var(--ink-soft); font-size: 13px; }
+/* Fulfillment bar visualises how much AI can do for that step. */
+.bar { height: 7px; background: var(--line); border-radius: 999px; margin-top: 5px; overflow: hidden; }
+.bar > span { display: block; height: 100%; background: var(--accent); border-radius: 999px; }
+/* Low-fulfillment steps are the human-in-the-loop gaps; flag them. */
+.step-row.gap .step-name::after {
+  content: " · human needed"; color: #b4561f; font-size: 12px; font-weight: 600;
+}
+.step-row.gap .bar > span { background: #d98a3d; }
+
+/* ---------- Footer ---------- */
+.site-footer { padding: 40px 0; }
+.site-footer p { color: var(--ink-soft); font-size: 14px; margin: 0; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 860px) {
+  .cards { grid-template-columns: 1fr; }
+  .map-layout { grid-template-columns: 1fr; }
+  .detail { position: static; }
+  .map-controls { flex-direction: column; align-items: flex-start; }
+}

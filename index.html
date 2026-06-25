@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Idea-to-Reality Stack — a general-purpose creation engine</title>
+  <meta name="description" content="From a 2020 second-brain workflow to a general-purpose creation engine: map any output artifact by how completely AI can build it and how easily it manifests in the real world." />
+  <!-- All styling lives in styles.css. -->
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ===================================================================
+       HERO + TLDR
+       The TLDR box gives the whole thesis up front, as requested.
+       =================================================================== -->
+  <header class="hero">
+    <div class="wrap">
+      <p class="eyebrow">Idea-to-Reality Stack &middot; v2.0</p>
+      <h1>A general-purpose<br /><span class="accent">creation engine</span></h1>
+      <p class="lede">
+        In 2020 I mapped the tools a person needs to turn ideas into reality.
+        Now the question is different: for <em>any</em> output you can imagine,
+        how much of it can AI build end-to-end &mdash; and what's still on you?
+      </p>
+
+      <!-- TLDR: the at-a-glance summary. -->
+      <aside class="tldr" aria-label="TL;DR">
+        <h2>TL;DR</h2>
+        <ul>
+          <li><strong>The thesis:</strong> every artifact (an eBook, a song, a SaaS app, a house) can be plotted by two axes &mdash; <strong>completeness</strong> (how much AI + a human can finish end-to-end) and <strong>ease</strong> (how little real-world friction blocks it).</li>
+          <li><strong>The engine:</strong> say &ldquo;make X&rdquo; &rarr; it decomposes X into a production graph, maps each step to the best tool/agent, scores the fulfillment %, and shows you exactly where a human must step in.</li>
+          <li><strong>The frontier moves:</strong> as models improve, artifacts migrate up-and-right. Drag the year slider on the map below to watch the frontier advance.</li>
+          <li><strong>Try it:</strong> <a href="#map">click any dot on the live map</a> to expand its stack and human-in-the-loop gaps.</li>
+        </ul>
+      </aside>
+
+      <div class="hero-cta">
+        <a class="btn" href="#map">Explore the live map &darr;</a>
+        <a class="btn btn-ghost" href="#engine">How the engine works</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+
+    <!-- ===================================================================
+         SECTION: THE BIG IDEA
+         =================================================================== -->
+    <section id="idea" class="prose">
+      <h2>The big idea</h2>
+      <p>
+        Part of solving for AGI is building out the <strong>potential space of all
+        possible output artifacts</strong> &mdash; then building the heuristics and
+        processes that align each artifact's necessary <em>inputs</em> with the
+        <em>tools</em> and <em>steps</em> that produce it, in a logical flow.
+      </p>
+      <p>
+        The goal over the next few years: an <strong>unhinged amount of creative
+        output</strong>, produced by treating creation itself as a compilable
+        pipeline. This page is the thinking made visible &mdash; and the live map is
+        the first working organ of that engine.
+      </p>
+    </section>
+
+    <!-- ===================================================================
+         SECTION: FROM 2020 -> NOW  (summary of the old conception)
+         =================================================================== -->
+    <section id="origin" class="prose">
+      <h2>From a second brain to a creation engine</h2>
+      <p>
+        The original <em>Idea-to-Reality Stack</em> (2020) was a personal-workflow
+        language. Its core claim still holds: a &ldquo;second brain&rdquo; is only one
+        layer of a full stack that spans three stages &mdash;
+        <strong>Generate &rarr; Validate &rarr; Execute</strong> &mdash; built from both
+        <em>mental frameworks</em> and <em>digital/physical tools</em>.
+      </p>
+      <div class="cards">
+        <div class="card">
+          <h3>What survives</h3>
+          <p>Your stack is a function of <strong>who you are</strong> (exaptation, specific knowledge) &times; <strong>what you're making</strong>. The three-stage spine is still the backbone.</p>
+        </div>
+        <div class="card">
+          <h3>What's new</h3>
+          <p>Two new axes only GenAI makes meaningful: <strong>completeness</strong> and <strong>ease</strong>. And a new actor in the &ldquo;scope&rdquo; dimension: <strong>One Mind + N Agents</strong>.</p>
+        </div>
+        <div class="card">
+          <h3>The leap</h3>
+          <p>The old canvas <em>described</em> a stack. The engine <em>estimates and runs</em> one: given a target, it predicts how much it can deliver and surfaces the gaps.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         SECTION: THE LIVE MAP  (the main interactive element)
+         The empty containers below are populated by app.js at runtime.
+         =================================================================== -->
+    <section id="map" class="map-section">
+      <h2>The live map: ease &times; completeness</h2>
+      <p class="prose">
+        Every dot is an output artifact. <strong>Up</strong> = more of it can be done
+        end-to-end by AI + a human. <strong>Right</strong> = less real-world friction
+        (cost, robotics, regulation). Dot size = how many human touchpoints remain.
+        Use the controls to filter by domain and to move the AI-completable frontier
+        through time.
+      </p>
+
+      <!-- Controls: legend/domain filters + frontier-year slider.
+           app.js wires these up (see app.js -> buildControls). -->
+      <div class="map-controls">
+        <div id="legend" class="legend" aria-label="Filter by domain"></div>
+        <div class="frontier-control">
+          <label for="yearSlider">AI-completable frontier:
+            <strong><span id="yearLabel">2026</span></strong>
+          </label>
+          <input id="yearSlider" type="range" min="2023" max="2050" step="1" value="2026" />
+        </div>
+      </div>
+
+      <!-- The chart + the detail panel sit side by side on wide screens. -->
+      <div class="map-layout">
+        <!-- app.js draws the SVG scatter plot inside this container. -->
+        <div id="chart" class="chart" role="img"
+             aria-label="Scatter plot of output artifacts by ease and completeness"></div>
+
+        <!-- app.js fills this panel when a dot is clicked. -->
+        <aside id="detail" class="detail" aria-live="polite">
+          <p class="detail-hint">Click an artifact on the map to see its production
+            graph, the stack of tools per step, and the human-in-the-loop gaps.</p>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         SECTION: HOW THE ENGINE WORKS
+         =================================================================== -->
+    <section id="engine" class="prose">
+      <h2>How the engine works</h2>
+      <ol class="steps">
+        <li><strong>Decompose</strong> the target artifact into a production graph (sub-artifacts + steps).</li>
+        <li><strong>Map</strong> each step to the best available tool, agent, or skill (LLM, text-to-image, code, API, human, robot).</li>
+        <li><strong>Score</strong> each step's fulfillment % and ease, then roll up to a composite for the whole artifact.</li>
+        <li><strong>Surface the gaps</strong> &mdash; the exact steps where a human (or a not-yet-existing capability) must enter.</li>
+        <li><strong>Place</strong> the artifact on the map and show the full stack required to make it real.</li>
+      </ol>
+    </section>
+
+    <!-- ===================================================================
+         SECTION: ARCHITECTURE
+         =================================================================== -->
+    <section id="architecture" class="prose">
+      <h2>Architecture</h2>
+      <p>One portable knowledge layer, two front doors. The data is the moat; the UI and the agent-skills are thin clients over it.</p>
+      <div class="cards">
+        <div class="card">
+          <h3>1 &middot; Stack ontology</h3>
+          <p>Artifact taxonomy, step graphs, tool/agent registry, and fulfillment + ease heuristics &mdash; plain versioned files. (This site reads its seed from <code>data.js</code>.)</p>
+        </div>
+        <div class="card">
+          <h3>2 &middot; Estimator</h3>
+          <p>A headless &ldquo;make X&rdquo; planner (CLI/API) that returns the decomposition, the stack, a completeness %, an ease score, and the gaps.</p>
+        </div>
+        <div class="card">
+          <h3>3 &middot; Clients</h3>
+          <p>This interactive map + blog, plus <strong>bring-your-own-key</strong> agent skills (Claude/Codex/Hermes/OpenClaw) that don't just describe the stack &mdash; they run it.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         SECTION: GOAL / ROADMAP
+         =================================================================== -->
+    <section id="goal" class="prose">
+      <h2>The goal</h2>
+      <p>
+        Build the Creation Engine: a portable stack ontology plus a headless
+        estimator that, given a target output, returns its decomposition, the
+        required stack, a composite completeness % and ease score, the ordered plan,
+        and the human-in-the-loop gaps &mdash; rendered onto the ease &times;
+        completeness map you see above.
+      </p>
+      <p class="prose-muted">
+        Honesty rule: every fulfillment % cites the tool and maturity it's based on.
+        The map shows the capability frontier as it actually is, not as we wish it.
+      </p>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>Idea-to-Reality Stack &mdash; Serj Hunt. The frontier moves; the map keeps up.</p>
+    </div>
+  </footer>
+
+  <!-- Load order matters: data.js defines window.IRS_DATA first, then app.js
+       reads it to build the map. Both are plain scripts so GitHub Pages needs
+       no build step. -->
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
