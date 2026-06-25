@@ -192,6 +192,62 @@
     </section>
 
     <!-- ===================================================================
+         SECTION: THE ONTOLOGY  (Layer 1 made public-facing)
+         Plain-language description of the typed knowledge layer that powers
+         the map, plus a button to inspect that exact code on GitHub. The live
+         numbers below are produced by the TypeScript + Zod ontology and baked
+         into data.js by `npm run build:data`.
+         =================================================================== -->
+    <section id="ontology" class="prose">
+      <p class="eyebrow">Layer 1 &middot; the moat</p>
+      <h2>The ontology: the map's source of truth</h2>
+      <p>
+        Everything you see on the map is a thin renderer over one small,
+        carefully-typed dataset called the <strong>ontology</strong>. Think of it
+        as the engine's dictionary of <em>what can be made</em> and <em>what it
+        takes to make it</em>. It answers three questions in plain data:
+      </p>
+      <ul class="onto-list">
+        <li><strong>What are the outputs?</strong> A catalogue of <em>artifacts</em> &mdash; a blog post, a song, a SaaS app, a house &mdash; each with its position on the ease &times; completeness map.</li>
+        <li><strong>What tools exist?</strong> A registry of every <em>capability</em> (LLM, text-to-image, CAD, a 3D printer, a human, regulators), each tagged with the year it became viable.</li>
+        <li><strong>How is each output made?</strong> A <em>production graph</em>: ordered steps across Generate &rarr; Validate &rarr; Execute, where every step cites the tools it needs and a fulfillment % for how much AI can do unaided.</li>
+      </ul>
+
+      <!-- Live counts come straight from the ontology (see ontology/validate.ts
+           output); update them whenever the dataset grows. -->
+      <div class="onto-stats" aria-label="Ontology at a glance">
+        <div class="onto-stat"><span class="onto-num">37</span><span class="onto-label">artifacts</span></div>
+        <div class="onto-stat"><span class="onto-num">56</span><span class="onto-label">tools / agents</span></div>
+        <div class="onto-stat"><span class="onto-num">136</span><span class="onto-label">production steps</span></div>
+        <div class="onto-stat"><span class="onto-num">5</span><span class="onto-label">domains</span></div>
+      </div>
+
+      <p>
+        It's written in <strong>TypeScript and validated with Zod</strong>, so the
+        data can't drift out of shape: every artifact, tool, and step is checked
+        against a schema, and the build <em>refuses to publish</em> if a step ever
+        cites a tool that doesn't exist. That's the <strong>honesty rule</strong>
+        made mechanical &mdash; no capability gets claimed unless it's a real,
+        registered tool. A single command re-validates the ontology and
+        regenerates the <code>data.js</code> this site reads.
+      </p>
+
+      <!-- A concrete peek at the schema so the description isn't abstract. -->
+      <pre class="code-peek" aria-label="The Zod schema for a production step"><code>// ontology/schema.ts — every step must cite at least one tool
+const StepSchema = z.object({
+  stage:       StageEnum,                 // generate | validate | execute
+  name:        z.string().min(1),
+  toolIds:     z.array(z.string()).min(1), // ← can't be empty: the honesty rule
+  fulfillment: z.number().int().min(0).max(100),
+});</code></pre>
+
+      <div class="hero-cta">
+        <a class="btn" href="https://github.com/Serj-Sxhx/idea-to-reality-stack/tree/main/ontology" target="_blank" rel="noopener">Inspect the ontology code &nearr;</a>
+        <a class="btn btn-ghost" href="https://github.com/Serj-Sxhx/idea-to-reality-stack/blob/main/ontology/schema.ts" target="_blank" rel="noopener">See the Zod schema</a>
+      </div>
+    </section>
+
+    <!-- ===================================================================
          SECTION: GOAL / ROADMAP
          =================================================================== -->
     <section id="goal" class="prose">

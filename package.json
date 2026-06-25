@@ -1,0 +1,21 @@
+{
+  "name": "idea-to-reality-stack",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Idea-to-Reality Stack: a typed, validated ontology of output artifacts + the static landing page that renders the live ease x completeness map.",
+  "scripts": {
+    "validate": "tsx ontology/validate.ts",
+    "generate": "tsx ontology/generate.ts",
+    "build:data": "npm run validate && npm run generate"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^26.0.1",
+    "tsx": "^4.22.4",
+    "typescript": "^6.0.3"
+  }
+}
