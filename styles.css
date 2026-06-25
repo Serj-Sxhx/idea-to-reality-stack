@@ -31,6 +31,8 @@ body {
   background: var(--bg);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  /* Guards against a stray horizontal scrollbar from the 100vw full-bleed map. */
+  overflow-x: hidden;
 }
 
 /* Shared content width container (used by hero, main, footer). */
@@ -137,6 +139,18 @@ code {
 /* ---------- Map section ---------- */
 .map-section { background: linear-gradient(180deg, #fff, var(--bg)); }
 
+/* Full-bleed: break out of the parent .wrap column to span the whole viewport.
+   The negative margin trick widens the section to 100vw while staying centered. */
+.full-bleed {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  padding-left: 24px;
+  padding-right: 24px;
+}
+/* Keep the map content from stretching uncomfortably wide on large monitors. */
+.map-inner { max-width: 1500px; margin: 0 auto; }
+
 .map-controls {
   display: flex; justify-content: space-between; align-items: center;
   gap: 20px; flex-wrap: wrap; margin: 18px 0 12px;
@@ -158,20 +172,29 @@ code {
 .frontier-control { font-size: 14px; color: var(--ink-soft); }
 .frontier-control input[type="range"] { width: 220px; vertical-align: middle; }
 
-/* Chart + detail layout. */
+/* Chart + detail layout. Now full-width, the chart gets the lion's share. */
 .map-layout {
-  display: grid; grid-template-columns: 1.7fr 1fr; gap: 20px; align-items: start;
+  display: grid; grid-template-columns: 2.4fr 1fr; gap: 24px; align-items: start;
 }
 .chart {
   background: var(--surface); border: 1px solid var(--line);
-  border-radius: var(--radius); box-shadow: var(--shadow); padding: 8px;
-  min-height: 420px;
+  border-radius: var(--radius); box-shadow: var(--shadow); padding: 12px;
+  min-height: 560px;
 }
 .chart svg { width: 100%; height: auto; display: block; }
 
-/* The SVG dots + their hover/active behaviour (elements created in app.js). */
-.dot { cursor: pointer; transition: transform .08s ease; }
-.dot:hover { transform: scale(1.12); transform-origin: center; }
+/* The SVG dots + their hover/active behaviour (elements created in app.js).
+   transform-box: fill-box makes transform-origin: center resolve to the dot's
+   OWN centre, so scaling on hover grows symmetrically in place instead of
+   shifting the dot (which previously moved it off the cursor, fired mouseleave,
+   and caused the manic bounce/feedback loop). */
+.dot {
+  cursor: pointer;
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform .1s ease;
+}
+.dot:hover { transform: scale(1.18); }
 .dot.frontier-ready { stroke: var(--ink); stroke-width: 2; }
 .dot.frontier-future { opacity: .35; }
 .dot-label { font-size: 11px; fill: var(--ink-soft); pointer-events: none; }

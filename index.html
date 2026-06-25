@@ -112,39 +112,44 @@
          SECTION: THE LIVE MAP  (the main interactive element)
          The empty containers below are populated by app.js at runtime.
          =================================================================== -->
-    <section id="map" class="map-section">
-      <h2>The live map: ease &times; completeness</h2>
-      <p class="prose">
-        Every dot is an output artifact. <strong>Up</strong> = more of it can be done
-        end-to-end by AI + a human. <strong>Right</strong> = less real-world friction
-        (cost, robotics, regulation). Dot size = how many human touchpoints remain.
-        Use the controls to filter by domain and to move the AI-completable frontier
-        through time.
-      </p>
+    <!-- full-bleed: this section breaks out of the centered .wrap column so the
+         map can span the full viewport width (see styles.css .map-section.full-bleed).
+         .map-inner keeps the content from getting absurdly wide on big screens. -->
+    <section id="map" class="map-section full-bleed">
+      <div class="map-inner">
+        <h2>The live map: ease &times; completeness</h2>
+        <p class="prose">
+          Every dot is an output artifact. <strong>Up</strong> = more of it can be done
+          end-to-end by AI + a human. <strong>Right</strong> = less real-world friction
+          (cost, robotics, regulation). Dot size = how many human touchpoints remain.
+          Use the controls to filter by domain and to move the AI-completable frontier
+          through time.
+        </p>
 
-      <!-- Controls: legend/domain filters + frontier-year slider.
-           app.js wires these up (see app.js -> buildControls). -->
-      <div class="map-controls">
-        <div id="legend" class="legend" aria-label="Filter by domain"></div>
-        <div class="frontier-control">
-          <label for="yearSlider">AI-completable frontier:
-            <strong><span id="yearLabel">2026</span></strong>
-          </label>
-          <input id="yearSlider" type="range" min="2023" max="2050" step="1" value="2026" />
+        <!-- Controls: legend/domain filters + frontier-year slider.
+             app.js wires these up (see app.js -> buildControls). -->
+        <div class="map-controls">
+          <div id="legend" class="legend" aria-label="Filter by domain"></div>
+          <div class="frontier-control">
+            <label for="yearSlider">AI-completable frontier:
+              <strong><span id="yearLabel">2026</span></strong>
+            </label>
+            <input id="yearSlider" type="range" min="2023" max="2050" step="1" value="2026" />
+          </div>
         </div>
-      </div>
 
-      <!-- The chart + the detail panel sit side by side on wide screens. -->
-      <div class="map-layout">
-        <!-- app.js draws the SVG scatter plot inside this container. -->
-        <div id="chart" class="chart" role="img"
-             aria-label="Scatter plot of output artifacts by ease and completeness"></div>
+        <!-- The chart + the detail panel sit side by side on wide screens. -->
+        <div class="map-layout">
+          <!-- app.js draws the SVG scatter plot inside this container. -->
+          <div id="chart" class="chart" role="img"
+               aria-label="Scatter plot of output artifacts by ease and completeness"></div>
 
-        <!-- app.js fills this panel when a dot is clicked. -->
-        <aside id="detail" class="detail" aria-live="polite">
-          <p class="detail-hint">Click an artifact on the map to see its production
-            graph, the stack of tools per step, and the human-in-the-loop gaps.</p>
-        </aside>
+          <!-- app.js fills this panel when a dot is clicked. -->
+          <aside id="detail" class="detail" aria-live="polite">
+            <p class="detail-hint">Click an artifact on the map to see its production
+              graph, the stack of tools per step, and the human-in-the-loop gaps.</p>
+          </aside>
+        </div>
       </div>
     </section>
 
